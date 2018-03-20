@@ -7,6 +7,7 @@ app.use(bodyParser())
 
 const router = new Router()
 
+let proximoId = 3
 const users = {
     1: { username: 'lubien' },
     2: { username: 'leochrisis' },
@@ -17,10 +18,7 @@ router.get('/', (ctx, next) => {
 })
 
 router.get('/users', (ctx, next) => {
-    ctx.body = [
-        { username: 'lubien' },
-        { username: 'leochrisis' }
-    ]
+    ctx.body = Object.values(users)
 })
 
 router.get('/users/:id', (ctx, next) => {
@@ -34,8 +32,11 @@ router.get('/users/:id', (ctx, next) => {
 })
 
 router.post('/users', (ctx, next) => {
-    console.log(ctx.request.body)
-    ctx.body = 'Hello World'
+    const novoUsuario = ctx.request.body
+    const id = proximoId++
+    users[id] = novoUsuario
+    ctx.body = users[id]
+    ctx.status = 201
 })
 
 router.get('/outro', (ctx, next) => {
