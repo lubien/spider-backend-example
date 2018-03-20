@@ -17,6 +17,8 @@ router.get('/', (ctx, next) => {
     ctx.body = 'Hello World'
 })
 
+// CRUD (Create Read Update Delete)
+
 router.get('/users', (ctx, next) => {
     ctx.body = Object.values(users)
         // esta é uma gambiarra que vocês não devem aprender
