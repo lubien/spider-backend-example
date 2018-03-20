@@ -39,10 +39,6 @@ router.post('/users', (ctx, next) => {
     ctx.status = 201
 })
 
-router.get('/outro', (ctx, next) => {
-    ctx.body = 'Estou em outro'
-})
-
 app
   .use(router.routes())
   .use(router.allowedMethods())
