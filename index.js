@@ -8,7 +8,7 @@ const FileSync = require('lowdb/adapters/FileSync')
 const adapter = new FileSync('db.json')
 const db = low(adapter)
 
-db.defaults({ users: [] })
+db.defaults({ users: [], proximoId: 1 })
   .write()
 
 const app = new Koa()
@@ -16,7 +16,6 @@ app.use(bodyParser())
 
 const router = new Router()
 
-let proximoId = 3
 const users = {
     1: { username: 'lubien' },
     2: { username: 'leochrisis' },
@@ -44,14 +43,17 @@ router.get('/users/:id', (ctx, next) => {
 
 router.post('/users', (ctx, next) => {
     const novoUsuario = ctx.request.body
-    const id = proximoId++
-    
-    ctx.body = db.get('users')
+    const id = db.get('proximoId').value() // pega o proximoId do DB
+    db.update('proximoId', atual => atual + 1).write() // aumenta o proximoId
+    db.get('users')
         // insere nos dados do usuário o ID dele
         .push(Object.assign(novoUsuario, { id: id }))
         // Escreve no banco. Isto retorna uma lista, logo pegamos o
         // elemento de índice 0, o recém criado
-        .write()[0]
+        .write()
+
+    // encontra o usuário recém inserido
+    ctx.body = db.get('users').find({ id: id }).value()
     ctx.status = 201
 })
 
