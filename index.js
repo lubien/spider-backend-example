@@ -82,9 +82,15 @@ router.put('/users/:id', (ctx, next) => {
 })
 
 router.delete('/users/:id', (ctx, next) => {
-    const id = ctx.params.id
-    if (users[id]) {
-        users[id] = undefined
+    // É importante converter para número se não, vocês nunca vão achar
+    // o usuário no banco uma vez que o que vem do URL é uma string.
+    const id = Number(ctx.params.id)
+    const user = db.get('users').find({ id: id }).value()
+    
+    if (user) {
+        db.get('users')
+            .remove({ id: id })
+            .write()
         ctx.body = ''
         ctx.status = 204
     } else {
