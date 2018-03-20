@@ -32,9 +32,13 @@ router.get('/users', (ctx, next) => {
 })
 
 router.get('/users/:id', (ctx, next) => {
-    const id = ctx.params.id
-    if (users[id]) {
-        ctx.body = users[ctx.params.id]
+    // É importante converter para número se não, vocês nunca vão achar
+    // o usuário no banco uma vez que o que vem do URL é uma string.
+    const id = Number(ctx.params.id)
+    const user = db.get('users').find({ id: id }).value()
+
+    if (user) {
+        ctx.body = user
     } else {
         ctx.body = 'Not found'
         ctx.status = 404
