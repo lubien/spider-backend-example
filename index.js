@@ -2,6 +2,15 @@ const Koa = require('koa')
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
 
+const low = require('lowdb')
+const FileSync = require('lowdb/adapters/FileSync')
+
+const adapter = new FileSync('db.json')
+const db = low(adapter)
+
+db.defaults({ users: [] })
+  .write()
+
 const app = new Koa()
 app.use(bodyParser())
 
