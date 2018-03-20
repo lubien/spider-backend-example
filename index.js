@@ -29,9 +29,7 @@ router.get('/', (ctx, next) => {
 // CRUD (Create Read Update Delete)
 
 router.get('/users', (ctx, next) => {
-    ctx.body = Object.values(users)
-        // esta é uma gambiarra que vocês não devem aprender
-        .filter(x => x)
+    ctx.body = db.get('users')
 })
 
 router.get('/users/:id', (ctx, next) => {
