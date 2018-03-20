@@ -19,6 +19,8 @@ router.get('/', (ctx, next) => {
 
 router.get('/users', (ctx, next) => {
     ctx.body = Object.values(users)
+        // esta é uma gambiarra que vocês não devem aprender
+        .filter(x => x)
 })
 
 router.get('/users/:id', (ctx, next) => {
@@ -46,6 +48,18 @@ router.put('/users/:id', (ctx, next) => {
         const usuario = users[id]
         Object.assign(usuario, novosDados)
         ctx.body = usuario
+    } else {
+        ctx.body = 'Not found'
+        ctx.status = 404
+    }
+})
+
+router.delete('/users/:id', (ctx, next) => {
+    const id = ctx.params.id
+    if (users[id]) {
+        users[id] = undefined
+        ctx.body = ''
+        ctx.status = 204
     } else {
         ctx.body = 'Not found'
         ctx.status = 404
