@@ -39,6 +39,19 @@ router.post('/users', (ctx, next) => {
     ctx.status = 201
 })
 
+router.put('/users/:id', (ctx, next) => {
+    const id = ctx.params.id
+    if (users[id]) {
+        const novosDados = ctx.request.body
+        const usuario = users[id]
+        Object.assign(usuario, novosDados)
+        ctx.body = usuario
+    } else {
+        ctx.body = 'Not found'
+        ctx.status = 404
+    }
+})
+
 app
   .use(router.routes())
   .use(router.allowedMethods())
