@@ -62,12 +62,19 @@ router.post('/users', (ctx, next) => {
 })
 
 router.put('/users/:id', (ctx, next) => {
-    const id = ctx.params.id
-    if (users[id]) {
+    // É importante converter para número se não, vocês nunca vão achar
+    // o usuário no banco uma vez que o que vem do URL é uma string.
+    const id = Number(ctx.params.id)
+    const user = db.get('users').find({ id: id }).value()
+    
+    if (user) {
         const novosDados = ctx.request.body
-        const usuario = users[id]
-        Object.assign(usuario, novosDados)
-        ctx.body = usuario
+
+        ctx.body = db.get('users')
+            .find({ id: id })
+            // injeta os novos dados
+            .assign(novosDados)
+            .write()
     } else {
         ctx.body = 'Not found'
         ctx.status = 404
