@@ -45,8 +45,13 @@ router.get('/users/:id', (ctx, next) => {
 router.post('/users', (ctx, next) => {
     const novoUsuario = ctx.request.body
     const id = proximoId++
-    users[id] = novoUsuario
-    ctx.body = users[id]
+    
+    ctx.body = db.get('users')
+        // insere nos dados do usuário o ID dele
+        .push(Object.assign(novoUsuario, { id: id }))
+        // Escreve no banco. Isto retorna uma lista, logo pegamos o
+        // elemento de índice 0, o recém criado
+        .write()[0]
     ctx.status = 201
 })
 
