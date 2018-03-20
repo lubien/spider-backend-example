@@ -1,6 +1,9 @@
 const Koa = require('koa')
 const Router = require('koa-router')
+const bodyParser = require('koa-bodyparser')
+
 const app = new Koa()
+app.use(bodyParser())
 
 const router = new Router()
 
@@ -28,7 +31,11 @@ router.get('/users/:id', (ctx, next) => {
         ctx.body = 'Not found'
         ctx.status = 404
     }
-    
+})
+
+router.post('/users', (ctx, next) => {
+    console.log(ctx.request.body)
+    ctx.body = 'Hello World'
 })
 
 router.get('/outro', (ctx, next) => {
