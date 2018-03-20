@@ -16,11 +16,6 @@ app.use(bodyParser())
 
 const router = new Router()
 
-const users = {
-    1: { username: 'lubien' },
-    2: { username: 'leochrisis' },
-}
-
 router.get('/', (ctx, next) => {
     ctx.body = 'Hello World'
 })
